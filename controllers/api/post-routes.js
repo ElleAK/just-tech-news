@@ -4,8 +4,7 @@ const { Post, User, Comment, Vote } = require('../../models');
 
 // get all users
 router.get('/', (req, res) => {
-  console.log('======================');
-  Post.findAll({
+    Post.findAll({
     attributes: [
       'id',
       'post_url',
@@ -92,12 +91,12 @@ router.post('/', (req, res) => {
 
 router.put('/upvote', (req, res) => {
   // custom static method created in models/Post.js
-  Post.upvote(req.body, { Vote, Comment, User })
-    .then(updatedVoteData => res.json(updatedVoteData))
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  Post.upvote({...req.body, user_id: req.session.user_id}, { Vote, Comment, User })
+    .then(updatedPostData => res.json(updatedPostData))
+            .catch(err => {
+                console.log(err);
+                res.status(400).json(err);
+        });
 });
 
 router.put('/:id', (req, res) => {

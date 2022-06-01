@@ -29,10 +29,10 @@ router.get('/:id', (req, res) => {
           },
           {
             model: Comment,
-            attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+            attributes: ['id', 'comment_text', 'created_at'],
             include: {
-              model: User,
-              attributes: ['username']
+              model: Post,
+              attributes: ['title']
             }
           },
           {
@@ -65,7 +65,9 @@ router.post('/', (req, res) => {
       email: req.body.email,
       password: req.body.password
     })
-      .then(dbUserData => res.json(dbUserData))
+    .then(dbUserData => {
+      res.json(dbUserData);
+    })
       .catch(err => {
         console.log(err);
         res.status(500).json(err);
